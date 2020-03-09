@@ -1,6 +1,6 @@
 var ShaderUtils = {
 
-    InitShader = function(gl, VSSource, FSSource)
+    InitShader : function(gl, VSSource, FSSource)
     {
         const VertexShader = LoadShader(gl, gl.VERTEX_SHADER, VSSource);
         const FragmentShader = LoadShader(gl, gl.FRAGMENT_SHADER, FSSource);
@@ -18,5 +18,21 @@ var ShaderUtils = {
         }
 
         return ShaderProgram;
+    },
+
+    LoadShader : function(gl, Type, Source){
+        const shader = gl.createShader(Type);
+
+        gl.shaderSource(shader, Source);
+        gl.compileShader(shader);
+
+        if(!gl.getShaderParameter(shader, gl.COMPILE_STATUS))
+        {
+            Utils.Log(ELogChannels.ERROR, 'Error compiling shaders: \n\t' + gl.getShaderInfoLog(shader));
+            gl.deleteShader(shader);
+            return null;
+        }
+
+        return shader;
     }
 }
